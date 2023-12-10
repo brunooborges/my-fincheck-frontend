@@ -1,26 +1,27 @@
-import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 import { MONTHS } from '../../../../../app/config/constants';
-
 import { cn } from '../../../../../app/utils/cn';
 import { formatCurrency } from '../../../../../app/utils/formatCurrency';
-
+import emptyStateImage from '../../../../../assets/empty-state.svg';
 import { Spinner } from '../../../../components/Spinner';
 import { FilterIcon } from '../../../../components/icons/FilterIcon';
-import { TransactionsIcon } from '../../../../components/icons/TransactionsIcon';
 import { CategoryIcon } from '../../../../components/icons/categories/CategoryIcon';
-
+import { FiltersModal } from './FiltersModal';
 import { SliderNavigation } from './SliderNavigation';
 import { SliderOption } from './SliderOption';
-
+import { TransactionTypeDropdown } from './TransactionTypeDropdown';
 import { useTransactionsController } from './useTransactionsController';
 
-import emptyStateImage from '../../../../../assets/empty-state.svg';
-
 export function Transactions() {
-  const { areValuesVisible, isInitialLoading, isLoading, transactions } =
-    useTransactionsController();
+  const {
+    areValuesVisible,
+    isInitialLoading,
+    isLoading,
+    transactions,
+    handleOpenFiltersModal,
+    handleCloseFiltersModal,
+    isFiltersModalOpen,
+  } = useTransactionsController();
 
   const hasTransactions = transactions.length > 0;
 
@@ -34,17 +35,16 @@ export function Transactions() {
 
       {!isInitialLoading && (
         <>
+          <FiltersModal
+            open={isFiltersModalOpen}
+            onClose={handleCloseFiltersModal}
+          />
+
           <header>
             <div className='flex items-center justify-between'>
-              <button className='flex items-center gap-2'>
-                <TransactionsIcon />
-                <span className='text-sm text-gray-800 tracking-[-0.5px] font-medium'>
-                  Transações
-                </span>
-                <ChevronDownIcon className='text-gray-900' />
-              </button>
+              <TransactionTypeDropdown />
 
-              <button>
+              <button onClick={handleOpenFiltersModal}>
                 <FilterIcon />
               </button>
             </div>

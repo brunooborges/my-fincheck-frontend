@@ -1,7 +1,26 @@
+import { useState } from 'react';
 import { useDashBoard } from '../../DashBoardContext/useDashBoard';
 
 export function useTransactionsController() {
   const { areValuesVisible } = useDashBoard();
 
-  return { areValuesVisible, isInitialLoading: false, isLoading: false, transactions: [] };
+  const [isFiltersModalOpen, setIsFiltersModalOpen] = useState(false);
+
+  function handleOpenFiltersModal() {
+    setIsFiltersModalOpen(true);
+  }
+
+  function handleCloseFiltersModal() {
+    setIsFiltersModalOpen(false);
+  }
+
+  return {
+    areValuesVisible,
+    isInitialLoading: false,
+    isLoading: false,
+    transactions: [],
+    handleOpenFiltersModal,
+    handleCloseFiltersModal,
+    isFiltersModalOpen,
+  };
 }

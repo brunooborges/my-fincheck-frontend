@@ -1,7 +1,9 @@
 import { Logo } from '../../components/Logo';
+import { Modal } from '../../components/Modal';
 import { UserMenu } from '../../components/UserMenu';
 import { DashBoardProvider } from './DashBoardContext';
 import { Accounts } from './components/Accounts';
+import { Fab } from './components/Fab';
 import { Transactions } from './components/Transactions';
 
 export function DashBoard() {
@@ -21,6 +23,8 @@ export function DashBoard() {
             <Transactions />
           </section>
         </main>
+
+        <Fab />
       </div>
     </DashBoardProvider>
   );
