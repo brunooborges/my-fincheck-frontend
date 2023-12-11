@@ -1,7 +1,7 @@
 import { cn } from '../../../../../app/utils/cn';
 import { formatCurrency } from '../../../../../app/utils/formatCurrency';
 import { BankAccountTypeIcon } from '../../../../components/icons/BankAccountTypeIcon';
-import { useDashBoard } from '../../DashBoardContext/useDashBoard';
+import { useDashBoard } from '../DashBoardContext/useDashBoard';
 
 interface AccountCardProps {
   color: string;
@@ -20,7 +20,9 @@ export function AccountCard({ color, name, balance, type }: AccountCardProps) {
     >
       <div>
         <BankAccountTypeIcon type={type} />
-        <span className='text-gray-800 font-medium tracking-[-0.5px] mt-4 block'>{name}</span>
+        <span className='text-gray-800 font-medium tracking-[-0.5px] mt-4 block'>
+          {name}
+        </span>
       </div>
 
       <div>

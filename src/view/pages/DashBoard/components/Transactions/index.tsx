@@ -84,7 +84,9 @@ export function Transactions() {
                   src={emptyStateImage}
                   alt='Empty State'
                 />
-                <p className='text-gray-700 text-center'>Não encontramos nenhuma transação!</p>
+                <p className='text-gray-700 text-center'>
+                  Não encontramos nenhuma transação!
+                </p>
               </div>
             )}
 
@@ -94,7 +96,9 @@ export function Transactions() {
                   <div className='flex-1 flex items-center gap-3'>
                     <CategoryIcon type='expense' />
                     <div className=''>
-                      <strong className='block font-bold tracking-[-0.5px]'>Almoço</strong>
+                      <strong className='block font-bold tracking-[-0.5px]'>
+                        Almoço
+                      </strong>
                       <span className='text-sm text-gray-600'>05/12/2023</span>
                     </div>
                   </div>
@@ -111,7 +115,9 @@ export function Transactions() {
                   <div className='flex-1 flex items-center gap-3'>
                     <CategoryIcon type='income' />
                     <div className=''>
-                      <strong className='block font-bold tracking-[-0.5px]'>Almoço</strong>
+                      <strong className='block font-bold tracking-[-0.5px]'>
+                        Almoço
+                      </strong>
                       <span className='text-sm text-gray-600'>05/12/2023</span>
                     </div>
                   </div>

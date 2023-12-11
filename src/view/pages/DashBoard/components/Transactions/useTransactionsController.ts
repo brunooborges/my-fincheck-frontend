@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useDashBoard } from '../../DashBoardContext/useDashBoard';
-
+import { useDashBoard } from '../DashBoardContext/useDashBoard';
 export function useTransactionsController() {
   const { areValuesVisible } = useDashBoard();
 
