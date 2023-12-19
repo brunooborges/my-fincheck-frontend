@@ -2,10 +2,10 @@ import { PlusIcon } from '@radix-ui/react-icons';
 import { DropdownMenu } from '../../../../components/DropdownMenu';
 import { BankAccountIcon } from '../../../../components/icons/BankAccountIcon';
 import { CategoryIcon } from '../../../../components/icons/categories/CategoryIcon';
-import { useDashBoard } from '../DashBoardContext/useDashBoard';
+import { useDashboard } from '../DashboardContext/useDashboard';
 
 export function Fab() {
-  const { openNewAccountModal, openNewTransactionModal } = useDashBoard();
+  const { openNewAccountModal, openNewTransactionModal } = useDashboard();
 
   return (
     <div className='fixed right-4 bottom-4'>

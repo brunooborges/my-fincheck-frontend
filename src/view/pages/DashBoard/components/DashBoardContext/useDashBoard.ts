@@ -1,6 +1,6 @@
 import { useContext } from 'react';
-import { DashBoardContext } from '.';
+import { DashboardContext } from '.';
 
-export function useDashBoard() {
-  return useContext(DashBoardContext);
+export function useDashboard() {
+  return useContext(DashboardContext);
 }

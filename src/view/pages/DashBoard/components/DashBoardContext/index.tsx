@@ -1,6 +1,7 @@
 import { createContext, useCallback, useState } from 'react';
+import { BankAccount } from '../../../../../app/services/entities/BankAccount';
 
-interface DashBoardContextValue {
+interface DashboardContextValue {
   areValuesVisible: boolean;
   isNewAccountModalOpen: boolean;
   isNewTransactionModalOpen: boolean;
@@ -10,28 +11,34 @@ interface DashBoardContextValue {
   closeNewAccountModal(): void;
   openNewTransactionModal(type: 'INCOME' | 'EXPENSE'): void;
   closeNewTransactionModal(): void;
+  isEditAccountModalOpen: boolean;
+  accountBeingEdited: null | BankAccount;
+  openEditAccountModal(bankAccount: BankAccount): void;
+  closeEditAccountModal(): void;
 }
 
-export const DashBoardContext = createContext({} as DashBoardContextValue);
+export const DashboardContext = createContext({} as DashboardContextValue);
 
-export function DashBoardProvider({ children }: { children: React.ReactNode }) {
+export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [areValuesVisible, setAreValuesVisible] = useState(() => {
-    if (localStorage.getItem('dashBoardValuesVisibility') === 'false') {
+    if (localStorage.getItem('dashboardValuesVisibility') === 'false') {
       return false;
     }
     return true;
   });
   const [isNewAccountModalOpen, setIsNewAccountModalOpen] = useState(false);
-  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(true);
+  const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
   const [newTransactionType, setNewTransactionType] = useState<
     'INCOME' | 'EXPENSE' | null
   >(null);
+  const [isEditAccountModalOpen, setIsEditAccountModalOpen] = useState(false);
+  const [accountBeingEdited, setAccountBeingEdited] = useState<null | BankAccount>(null);
 
   const toggleValueVisibility = useCallback(() => {
     setAreValuesVisible((prevState) => !prevState);
 
     const invert = !areValuesVisible;
-    localStorage.setItem('dashBoardValuesVisibility', invert.toString());
+    localStorage.setItem('dashboardValuesVisibility', invert.toString());
   }, [areValuesVisible]);
 
   const openNewAccountModal = useCallback(() => {
@@ -48,9 +55,17 @@ export function DashBoardProvider({ children }: { children: React.ReactNode }) {
     setNewTransactionType(null);
     setIsNewTransactionModalOpen(false);
   }, []);
+  const openEditAccountModal = useCallback((bankAccount: BankAccount) => {
+    setAccountBeingEdited(bankAccount);
+    setIsEditAccountModalOpen(true);
+  }, []);
+  const closeEditAccountModal = useCallback(() => {
+    setAccountBeingEdited(null);
+    setIsEditAccountModalOpen(false);
+  }, []);
 
   return (
-    <DashBoardContext.Provider
+    <DashboardContext.Provider
       value={{
         areValuesVisible,
         toggleValueVisibility,
@@ -61,9 +76,13 @@ export function DashBoardProvider({ children }: { children: React.ReactNode }) {
         openNewTransactionModal,
         closeNewTransactionModal,
         newTransactionType,
+        isEditAccountModalOpen,
+        accountBeingEdited,
+        openEditAccountModal,
+        closeEditAccountModal,
       }}
     >
       {children}
-    </DashBoardContext.Provider>
+    </DashboardContext.Provider>
   );
 }
