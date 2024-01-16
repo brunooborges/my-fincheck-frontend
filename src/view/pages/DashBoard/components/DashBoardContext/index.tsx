@@ -1,5 +1,6 @@
 import { createContext, useCallback, useState } from 'react';
 import { BankAccount } from '../../../../../app/services/entities/BankAccount';
+import { Category } from '../../../../../app/services/entities/Category';
 
 interface DashboardContextValue {
   areValuesVisible: boolean;
@@ -15,6 +16,15 @@ interface DashboardContextValue {
   accountBeingEdited: null | BankAccount;
   openEditAccountModal(bankAccount: BankAccount): void;
   closeEditAccountModal(): void;
+  isEditCategoriesModalOpen: boolean;
+  isCategoryBeingEdited: boolean;
+  openEditCategoriesModal(): void;
+  closeEditCategoriesModal(): void;
+  openNewCategoryModal(): void;
+  closeNewCategoryModal(): void;
+  isNewCategoryModalOpen: boolean;
+  onSelectCategory(category: Category): void;
+  categoryBeingEdited: null | Category;
 }
 
 export const DashboardContext = createContext({} as DashboardContextValue);
@@ -28,11 +38,15 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
   });
   const [isNewAccountModalOpen, setIsNewAccountModalOpen] = useState(false);
   const [isNewTransactionModalOpen, setIsNewTransactionModalOpen] = useState(false);
+  const [isNewCategoryModalOpen, setIsNewCategoryModalOpen] = useState(false);
   const [newTransactionType, setNewTransactionType] = useState<
     'INCOME' | 'EXPENSE' | null
   >(null);
   const [isEditAccountModalOpen, setIsEditAccountModalOpen] = useState(false);
   const [accountBeingEdited, setAccountBeingEdited] = useState<null | BankAccount>(null);
+  const [isEditCategoriesModalOpen, setIsEditCategoriesModalOpen] = useState(false);
+  const [isCategoryBeingEdited, setIsCategoryBeingEdited] = useState(false);
+  const [categoryBeingEdited, setCategoryBeingEdited] = useState<null | Category>(null);
 
   const toggleValueVisibility = useCallback(() => {
     setAreValuesVisible((prevState) => !prevState);
@@ -63,6 +77,23 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
     setAccountBeingEdited(null);
     setIsEditAccountModalOpen(false);
   }, []);
+  const openNewCategoryModal = useCallback(() => {
+    setIsNewCategoryModalOpen(true);
+  }, []);
+  const closeNewCategoryModal = useCallback(() => {
+    setIsNewCategoryModalOpen(false);
+  }, []);
+  const openEditCategoriesModal = useCallback(() => {
+    setIsCategoryBeingEdited(true);
+    setIsEditCategoriesModalOpen(true);
+  }, []);
+  const closeEditCategoriesModal = useCallback(() => {
+    setIsCategoryBeingEdited(false);
+    setIsEditCategoriesModalOpen(false);
+  }, []);
+  const onSelectCategory = useCallback((category: Category) => {
+    setCategoryBeingEdited(category);
+  }, []);
 
   return (
     <DashboardContext.Provider
@@ -80,6 +111,15 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
         accountBeingEdited,
         openEditAccountModal,
         closeEditAccountModal,
+        openNewCategoryModal,
+        closeNewCategoryModal,
+        isNewCategoryModalOpen,
+        isEditCategoriesModalOpen,
+        openEditCategoriesModal,
+        closeEditCategoriesModal,
+        isCategoryBeingEdited,
+        onSelectCategory,
+        categoryBeingEdited,
       }}
     >
       {children}

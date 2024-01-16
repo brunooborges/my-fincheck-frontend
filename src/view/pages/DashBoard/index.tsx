@@ -5,14 +5,16 @@ import { DashboardContext, DashboardProvider } from './components/DashboardConte
 import { Fab } from './components/Fab';
 import { Transactions } from './components/Transactions';
 import { EditAccountModal } from './modals/EditAccountModal';
+import { EditCategoryModal } from './modals/EditCategoryModal';
 import { NewAccountModal } from './modals/NewAccountModal';
+import { NewCategoryModal } from './modals/NewCategoryModal';
 import { NewTransactionModal } from './modals/NewTransactionModal';
 
 export function DashBoard() {
   return (
     <DashboardProvider>
       <DashboardContext.Consumer>
-        {({ accountBeingEdited }) => (
+        {({ accountBeingEdited, isCategoryBeingEdited }) => (
           <div className='h-full w-full p-4 md:px-8 md:pb-8 md:pt-6 flex flex-col gap-4'>
             <header className='h-12 flex items-center justify-between'>
               <Logo className='h-6 text-teal-900' />
@@ -33,7 +35,9 @@ export function DashBoard() {
 
             <NewAccountModal />
             <NewTransactionModal />
+            <NewCategoryModal />
             {accountBeingEdited && <EditAccountModal />}
+            {isCategoryBeingEdited && <EditCategoryModal />}
           </div>
         )}
       </DashboardContext.Consumer>
