@@ -7,6 +7,7 @@ export interface UpdateTransactionParams {
   name: string;
   value: number;
   date: string;
+  installmentOption: number;
   type: 'INCOME' | 'EXPENSE';
 }
 

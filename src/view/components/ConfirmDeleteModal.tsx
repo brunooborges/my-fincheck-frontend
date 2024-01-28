@@ -4,10 +4,12 @@ import { TrashIcon } from './icons/TrashIcon';
 
 interface ConfirmDeleteModalProps {
   onConfirm(): void;
+  onConfirmAll?(): void;
   onClose(): void;
   title: string;
   description?: string;
   isLoading: boolean;
+  installments?: number;
 }
 
 export function ConfirmDeleteModal({
@@ -15,6 +17,8 @@ export function ConfirmDeleteModal({
   title,
   description,
   onConfirm,
+  onConfirmAll,
+  installments,
   isLoading,
 }: ConfirmDeleteModalProps) {
   return (
@@ -38,8 +42,18 @@ export function ConfirmDeleteModal({
           onClick={onConfirm}
           isLoading={isLoading}
         >
-          Sim, desejo exlcuir
+          Sim, desejo exlcuir {installments && installments > 1 && 'esta parcela'}
         </Button>
+        {installments && installments > 1 && (
+          <Button
+            variant='danger'
+            className='w-full'
+            onClick={onConfirmAll}
+            isLoading={isLoading}
+          >
+            Sim, desejo exlcuir todas as parcelas
+          </Button>
+        )}
         <Button
           variant='ghost'
           className='w-full'

@@ -25,6 +25,9 @@ interface DashboardContextValue {
   isNewCategoryModalOpen: boolean;
   onSelectCategory(category: Category): void;
   categoryBeingEdited: null | Category;
+  isEditUserModalOpen: boolean;
+  openEditUserModal(): void;
+  closeEditUserModal(): void;
 }
 
 export const DashboardContext = createContext({} as DashboardContextValue);
@@ -47,6 +50,7 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [isEditCategoriesModalOpen, setIsEditCategoriesModalOpen] = useState(false);
   const [isCategoryBeingEdited, setIsCategoryBeingEdited] = useState(false);
   const [categoryBeingEdited, setCategoryBeingEdited] = useState<null | Category>(null);
+  const [isEditUserModalOpen, setIsEditUserModalOpen] = useState(false);
 
   const toggleValueVisibility = useCallback(() => {
     setAreValuesVisible((prevState) => !prevState);
@@ -94,6 +98,12 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const onSelectCategory = useCallback((category: Category) => {
     setCategoryBeingEdited(category);
   }, []);
+  const openEditUserModal = useCallback(() => {
+    setIsEditUserModalOpen(true);
+  }, []);
+  const closeEditUserModal = useCallback(() => {
+    setIsEditUserModalOpen(false);
+  }, []);
 
   return (
     <DashboardContext.Provider
@@ -120,6 +130,9 @@ export function DashboardProvider({ children }: { children: React.ReactNode }) {
         isCategoryBeingEdited,
         onSelectCategory,
         categoryBeingEdited,
+        isEditUserModalOpen,
+        openEditUserModal,
+        closeEditUserModal,
       }}
     >
       {children}

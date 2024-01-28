@@ -6,6 +6,7 @@ import { Fab } from './components/Fab';
 import { Transactions } from './components/Transactions';
 import { EditAccountModal } from './modals/EditAccountModal';
 import { EditCategoryModal } from './modals/EditCategoryModal';
+import { EditUserModal } from './modals/EditUserModal';
 import { NewAccountModal } from './modals/NewAccountModal';
 import { NewCategoryModal } from './modals/NewCategoryModal';
 import { NewTransactionModal } from './modals/NewTransactionModal';
@@ -38,6 +39,7 @@ export function DashBoard() {
             <NewCategoryModal />
             {accountBeingEdited && <EditAccountModal />}
             {isCategoryBeingEdited && <EditCategoryModal />}
+            <EditUserModal />
           </div>
         )}
       </DashboardContext.Consumer>

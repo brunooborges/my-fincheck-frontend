@@ -57,6 +57,7 @@ export function useEditCategoryModalController() {
       });
 
       queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
       toast.success('A categoria foi editada com sucesso');
       closeEditCategoriesModal();
     } catch (err) {

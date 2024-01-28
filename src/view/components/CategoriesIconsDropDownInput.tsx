@@ -56,13 +56,15 @@ export function CategoriesIconsDropDownInput({
     onChange?.(icon.icon);
   }
 
+  const isIncome = selectedCategoryIcon?.type === 'income';
+
   return (
     <div>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <button
             className={cn(
-              'bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-800 focus:border-gray-700 transition-all outline-none text-left relative',
+              'bg-white w-full rounded-lg border border-gray-500 px-3 h-[52px] text-gray-800 focus:border-gray-700 transition-all outline-none text-left relative data-[state=disabled]:bg-gray-600',
               error && '!border-red-900',
               className,
             )}
@@ -83,19 +85,21 @@ export function CategoriesIconsDropDownInput({
           </button>
         </DropdownMenu.Trigger>
 
-        <DropdownMenu.Content className='grid grid-cols-4'>
-          {icons.map((icon) => (
-            <DropdownMenu.Item
-              key={icon.icon}
-              onSelect={() => handleSelect(icon)}
-            >
-              <CategoryIcon
-                type={icon.type}
-                category={icon.icon}
-              />
-            </DropdownMenu.Item>
-          ))}
-        </DropdownMenu.Content>
+        {!isIncome && (
+          <DropdownMenu.Content className='grid grid-cols-4'>
+            {icons.map((icon) => (
+              <DropdownMenu.Item
+                key={icon.icon}
+                onSelect={() => handleSelect(icon)}
+              >
+                <CategoryIcon
+                  type={icon.type}
+                  category={icon.icon}
+                />
+              </DropdownMenu.Item>
+            ))}
+          </DropdownMenu.Content>
+        )}
       </DropdownMenu.Root>
       {error && (
         <div className='flex gap-2 items-center mt-2 text-red-900'>

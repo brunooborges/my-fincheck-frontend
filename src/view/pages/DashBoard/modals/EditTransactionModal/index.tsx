@@ -25,13 +25,17 @@ export function EditTransactionModal({
     control,
     errors,
     handleSubmit,
+    handleAllSubmit,
     register,
     accounts,
     categories,
     isPending,
+    isPendingAll,
     isPendingDelete,
+    isPendingAllDelete,
     isDeleteModalOpen,
     handleDeleteTransaction,
+    handleDeleteAllTransactionInstallments,
     handleOpenDeleteModal,
     handleCloseDeleteModal,
   } = useEditTransactionModalController(transaction, onClose);
@@ -41,9 +45,13 @@ export function EditTransactionModal({
   if (isDeleteModalOpen) {
     return (
       <ConfirmDeleteModal
-        isLoading={isPendingDelete}
+        isLoading={
+          transaction!.installmentOption === 1 ? isPendingDelete : isPendingAllDelete
+        }
         onClose={handleCloseDeleteModal}
         onConfirm={handleDeleteTransaction}
+        onConfirmAll={handleDeleteAllTransactionInstallments}
+        installments={transaction?.installmentOption}
         title={`Tem certeza que deseja excluir esta ${
           isExpense ? 'despesa' : 'receita'
         }?`}
@@ -62,7 +70,7 @@ export function EditTransactionModal({
         </div>
       }
     >
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           <span className='text-gray-600 trackin-[0.5px] text-xs'>
             Valor {isExpense ? 'da Despesa' : 'da Receita'}
@@ -144,8 +152,17 @@ export function EditTransactionModal({
           type='submit'
           className='w-full mt-6'
           isLoading={isPending}
+          onClick={() => handleSubmit()}
         >
-          Salvar
+          Salvar parcela
+        </Button>
+        <Button
+          type='submit'
+          className='w-full mt-6'
+          isLoading={isPendingAll}
+          onClick={() => handleAllSubmit()}
+        >
+          Salvar todas as parcelas
         </Button>
       </form>
     </Modal>

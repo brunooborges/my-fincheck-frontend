@@ -5,6 +5,7 @@ export interface CreateTransactionParams {
   categoryId: string;
   name: string;
   value: number;
+  installmentOption: number;
   date: string;
   type: 'INCOME' | 'EXPENSE';
 }

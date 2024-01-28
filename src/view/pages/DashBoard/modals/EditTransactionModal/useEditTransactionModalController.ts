@@ -46,11 +46,23 @@ export function useEditTransactionModalController(
   const { accounts } = useBankAccounts();
   const { categories: categoriesList } = useCategories();
   const queryClient = useQueryClient();
+
   const { isPending, mutateAsync: updateTransaction } = useMutation({
     mutationFn: transactionsService.update,
   });
+  const { isPending: isPendingAll, mutateAsync: updateAllInstallmentsTransaction } =
+    useMutation({
+      mutationFn: transactionsService.updateAllInstallments,
+    });
+
   const { isPending: isPendingDelete, mutateAsync: removeTransaction } = useMutation({
     mutationFn: transactionsService.remove,
+  });
+  const {
+    isPending: isPendingAllDelete,
+    mutateAsync: removeAllTransactionsInstallments,
+  } = useMutation({
+    mutationFn: transactionsService.removeAllInstallments,
   });
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -63,8 +75,38 @@ export function useEditTransactionModalController(
         type: transaction!.type,
         value: currencyStringToNumber(data.value),
         date: data.date.toISOString(),
+        installmentOption: transaction!.installmentOption,
       });
 
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
+      toast.success(
+        transaction!.type === 'EXPENSE'
+          ? 'A despesa foi editada com sucesso'
+          : 'A receita foi editada com sucesso',
+      );
+      onClose();
+    } catch {
+      toast.error(
+        transaction!.type === 'EXPENSE'
+          ? 'Erro ao salvar a despesa!'
+          : 'Erro ao salvar a receita!',
+      );
+    }
+  });
+
+  const handleAllSubmit = hookFormSubmit(async (data) => {
+    try {
+      await updateAllInstallmentsTransaction({
+        ...data,
+        installmentId: transaction!.installmentId,
+        type: transaction!.type,
+        value: currencyStringToNumber(data.value),
+        installmentOption: transaction!.installmentOption,
+      });
+
+      console.log(transaction!.installmentId);
+      queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
       toast.success(
         transaction!.type === 'EXPENSE'
@@ -106,6 +148,27 @@ export function useEditTransactionModalController(
     }
   }
 
+  async function handleDeleteAllTransactionInstallments() {
+    try {
+      await removeAllTransactionsInstallments(transaction!.installmentId);
+
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
+      toast.success(
+        transaction!.type === 'EXPENSE'
+          ? 'As despesas foram deletadas com sucesso!'
+          : 'As receitas foram deletadas com sucesso!',
+      );
+      onClose();
+    } catch {
+      toast.error(
+        transaction!.type === 'EXPENSE'
+          ? 'Erro ao deletar as despesas!'
+          : 'Erro ao deletar as receitas!',
+      );
+    }
+  }
+
   function handleOpenDeleteModal() {
     setIsDeleteModalOpen(true);
   }
@@ -119,12 +182,16 @@ export function useEditTransactionModalController(
     errors,
     control,
     handleSubmit,
+    handleAllSubmit,
     accounts,
     categories,
     isPending,
+    isPendingAll,
     isPendingDelete,
+    isPendingAllDelete,
     isDeleteModalOpen,
     handleDeleteTransaction,
+    handleDeleteAllTransactionInstallments,
     handleOpenDeleteModal,
     handleCloseDeleteModal,
   };

@@ -3,6 +3,7 @@ import { Button } from '../../../../components/Button';
 import { DatePickerInput } from '../../../../components/DatePickerInput';
 import { Input } from '../../../../components/Input';
 import { InputCurrency } from '../../../../components/InputCurrency';
+import { InputInstallmentOption } from '../../../../components/InputInstallmentOption';
 import { Modal } from '../../../../components/Modal';
 import { Select } from '../../../../components/Select';
 import { useNewTransactionModalController } from './useNewTransactionModalController';
@@ -52,13 +53,19 @@ export function NewTransactionModal() {
         </div>
 
         <div className='mt-10 flex flex-col gap-4'>
+          <InputInstallmentOption
+            type='number'
+            placeholder={'Forma de Parcelamento'}
+            defaultValue='1'
+            {...register('installmentOption')}
+            error={errors.installmentOption?.message}
+          />
           <Input
             type='text'
             placeholder={isExpense ? 'Nome da Despesa' : 'Nome da Receita'}
             {...register('name')}
             error={errors.name?.message}
           />
-
           <Controller
             control={control}
             name='categoryId'
@@ -76,7 +83,6 @@ export function NewTransactionModal() {
               />
             )}
           />
-
           <Controller
             control={control}
             name='bankAccountId'
@@ -94,7 +100,6 @@ export function NewTransactionModal() {
               />
             )}
           />
-
           <Controller
             control={control}
             name='date'

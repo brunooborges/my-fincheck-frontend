@@ -11,4 +11,6 @@ export interface Transaction {
     name: string;
     icon: string;
   };
+  installmentId: string;
+  installmentOption: number;
 }

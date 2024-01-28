@@ -10,12 +10,31 @@ import { transactionsService } from '../../../../../app/services/transactionsSer
 import { currencyStringToNumber } from '../../../../../app/utils/currencyStringToNumber';
 import { useDashboard } from '../../components/DashboardContext/useDashboard';
 
+const customErrorMessages = {
+  invalidNumber: 'Número inválido. Por favor insira apenas números inteiros.',
+  zeroError: 'O valor mínimo é 1.',
+  greaterThanMaximumError: 'Valor máximo é 99.',
+};
+
 const schema = z.object({
   value: z.string().min(1, 'Informe o valor'),
   name: z.string().min(1, 'Informe o nome'),
   categoryId: z.string().min(1, 'Informe a categoria'),
   bankAccountId: z.string().min(1, 'Informe a conta'),
   date: z.date(),
+  installmentOption: z
+    .string()
+    .refine((value) => /^[0-9]+$/.test(value))
+    .refine((value) => {
+      const intValue = parseInt(value);
+      return !isNaN(intValue);
+    }, customErrorMessages.invalidNumber)
+
+    .refine((value) => parseInt(value) !== 0, customErrorMessages.zeroError)
+    .refine(
+      (value) => parseInt(value) <= 99,
+      customErrorMessages.greaterThanMaximumError,
+    ),
 });
 
 type FormData = z.infer<typeof schema>;
@@ -45,6 +64,7 @@ export function useNewTransactionModalController() {
     try {
       await mutateAsync({
         ...data,
+        installmentOption: parseInt(data.installmentOption),
         value: currencyStringToNumber(data.value),
         type: newTransactionType!,
         date: data.date.toISOString(),
