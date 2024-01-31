@@ -105,7 +105,6 @@ export function useEditTransactionModalController(
         installmentOption: transaction!.installmentOption,
       });
 
-      console.log(transaction!.installmentId);
       queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
       toast.success(

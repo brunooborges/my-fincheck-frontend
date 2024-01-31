@@ -60,9 +60,8 @@ export function useEditCategoryModalController() {
       queryClient.invalidateQueries({ queryKey: ['transactions'] });
       toast.success('A categoria foi editada com sucesso');
       closeEditCategoriesModal();
-    } catch (err) {
+    } catch {
       toast.error('Erro ao salvar a categoria!');
-      console.log(err);
     }
   });
 
