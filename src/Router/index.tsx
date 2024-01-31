@@ -7,7 +7,7 @@ import { AuthGuard } from './AuthGuard';
 
 export function Router() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/mycontacts-front-end'>
       <Routes>
         <Route element={<AuthGuard isPrivate={false} />}>
           <Route element={<AuthLayout />}>
