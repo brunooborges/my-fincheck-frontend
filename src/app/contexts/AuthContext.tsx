@@ -32,22 +32,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const queryClient = useQueryClient();
 
-  const signin = useCallback((accessToken: string) => {
-    localStorage.setItem(localStorageKeys.ACCESS_TOKEN, accessToken);
-    httpClient.defaults.headers.Authorization = `Bearer ${accessToken}`;
-    setSignedIn(true);
-  }, []);
+  const signin = useCallback(
+    (accessToken: string) => {
+      localStorage.setItem(localStorageKeys.ACCESS_TOKEN, accessToken);
+      httpClient.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      queryClient.invalidateQueries({ queryKey: ['transactions'] });
+      queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
+      queryClient.invalidateQueries({ queryKey: ['categories'] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['me'] });
+      setSignedIn(true);
+    },
+    [queryClient],
+  );
 
   const signout = useCallback(() => {
     localStorage.removeItem(localStorageKeys.ACCESS_TOKEN);
-    queryClient.invalidateQueries({ queryKey: ['transactions'] });
-    queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
-    queryClient.invalidateQueries({ queryKey: ['categories'] });
-    queryClient.invalidateQueries({ queryKey: ['users'] });
-    queryClient.invalidateQueries({ queryKey: ['me'] });
 
     setSignedIn(false);
-  }, [queryClient]);
+  }, []);
 
   useEffect(() => {
     if (isError) {
