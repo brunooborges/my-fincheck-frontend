@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { AuthLayout } from '../view/layouts/AuthLayout';
 import { DashBoard } from '../view/pages/DashBoard';
 import { Login } from '../view/pages/Login';
@@ -7,7 +7,7 @@ import { AuthGuard } from './AuthGuard';
 
 export function Router() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route element={<AuthGuard isPrivate={false} />}>
           <Route element={<AuthLayout />}>
@@ -29,6 +29,6 @@ export function Router() {
           />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

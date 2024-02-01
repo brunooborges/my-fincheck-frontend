@@ -7,5 +7,5 @@ export default defineConfig({
   server: {
     open: true,
   },
-  base: '/my-fincheck-frontend/',
+  base: '/my-fincheck-frontend/login',
 });
