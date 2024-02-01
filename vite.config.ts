@@ -7,6 +7,5 @@ export default defineConfig({
   server: {
     open: true,
   },
-  base: 'my-fincheck-frontend',
-  build: { outDir: 'build' },
+  base: '/my-fincheck-frontend/',
 });
