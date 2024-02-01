@@ -8,4 +8,5 @@ export default defineConfig({
     open: true,
   },
   base: '/my-fincheck-frontend/',
+  build: { outDir: 'build' },
 });
