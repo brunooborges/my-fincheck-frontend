@@ -7,7 +7,7 @@ import { AuthGuard } from './AuthGuard';
 
 export function Router() {
   return (
-    <BrowserRouter basename='/my-fincheck-frontend'>
+    <BrowserRouter>
       <Routes>
         <Route element={<AuthGuard isPrivate={false} />}>
           <Route element={<AuthLayout />}>
