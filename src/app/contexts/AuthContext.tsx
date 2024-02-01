@@ -36,11 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     (accessToken: string) => {
       localStorage.setItem(localStorageKeys.ACCESS_TOKEN, accessToken);
       httpClient.defaults.headers.Authorization = `Bearer ${accessToken}`;
-      queryClient.invalidateQueries({ queryKey: ['transactions'] });
-      queryClient.invalidateQueries({ queryKey: ['bankAccounts'] });
-      queryClient.invalidateQueries({ queryKey: ['categories'] });
-      queryClient.invalidateQueries({ queryKey: ['users'] });
-      queryClient.invalidateQueries({ queryKey: ['me'] });
+      queryClient.invalidateQueries();
       setSignedIn(true);
     },
     [queryClient],
