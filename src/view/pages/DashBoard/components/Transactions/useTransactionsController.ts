@@ -1,8 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTransactions } from '../../../../../app/hooks/useTransactions';
 import { Transaction } from '../../../../../app/services/entities/Transaction';
 import { TransactionsFilters } from '../../../../../app/services/transactionsService/getAll';
 import { useDashboard } from '../DashboardContext/useDashboard';
+
+function getCurrentDateFilters(): Pick<TransactionsFilters, 'month' | 'year'> {
+  const today = new Date();
+
+  return {
+    month: today.getMonth(),
+    year: today.getFullYear(),
+  };
+}
+
+const INITIAL_FILTERS: TransactionsFilters = {
+  ...getCurrentDateFilters(),
+};
 
 export function useTransactionsController() {
   const { areValuesVisible } = useDashboard();
@@ -11,24 +24,14 @@ export function useTransactionsController() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [transactionBeingEdited, setTransactionBeingEdited] =
     useState<null | Transaction>(null);
-  const [filters, setFilters] = useState<TransactionsFilters>({
-    month: new Date().getMonth(),
-    year: new Date().getFullYear(),
-  });
+  const [filters, setFilters] = useState<TransactionsFilters>(INITIAL_FILTERS);
 
-  const { transactions, isLoading, isInitialLoading, refetchTransactions } =
-    useTransactions(filters);
-
-  useEffect(() => {
-    refetchTransactions();
-  }, [filters, refetchTransactions]);
+  const { transactions, isLoading, isInitialLoading } = useTransactions(filters);
 
   function handleChangeFilters<TFilter extends keyof TransactionsFilters>(
     filter: TFilter,
   ) {
     return (value: TransactionsFilters[TFilter]) => {
-      if (value === filters[filter]) return;
-
       setFilters((prevState) => ({
         ...prevState,
         [filter]: value,
@@ -39,12 +42,28 @@ export function useTransactionsController() {
   function handleApplyFilters({
     bankAccountId,
     year,
+    month,
+    search,
   }: {
     bankAccountId: string | undefined;
     year: number;
+    month: number;
+    search?: string;
   }) {
-    handleChangeFilters('bankAccountId')(bankAccountId);
-    handleChangeFilters('year')(year);
+    setFilters((prevState) => ({
+      ...prevState,
+      bankAccountId,
+      year,
+      month,
+      search,
+    }));
+    setIsFiltersModalOpen(false);
+  }
+
+  function handleClearFilters() {
+    setFilters({
+      ...getCurrentDateFilters(),
+    });
     setIsFiltersModalOpen(false);
   }
 
@@ -60,6 +79,7 @@ export function useTransactionsController() {
     setIsEditModalOpen(true);
     setTransactionBeingEdited(transaction);
   }
+
   function handleCloseEditModal() {
     setIsEditModalOpen(false);
     setTransactionBeingEdited(null);
@@ -77,6 +97,7 @@ export function useTransactionsController() {
     handleChangeFilters,
     filters,
     handleApplyFilters,
+    handleClearFilters,
     transactionBeingEdited,
     handleOpenEditModal,
     handleCloseEditModal,

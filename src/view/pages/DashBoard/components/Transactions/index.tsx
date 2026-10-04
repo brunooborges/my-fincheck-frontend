@@ -1,3 +1,4 @@
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { MONTHS } from '../../../../../app/config/constants';
 import { cn } from '../../../../../app/utils/cn';
@@ -26,6 +27,7 @@ export function Transactions() {
     handleChangeFilters,
     filters,
     handleApplyFilters,
+    handleClearFilters,
     handleCloseEditModal,
     handleOpenEditModal,
     isEditModalOpen,
@@ -33,6 +35,14 @@ export function Transactions() {
   } = useTransactionsController();
 
   const hasTransactions = transactions.length > 0;
+
+  const today = new Date();
+  const hasActiveFilters =
+    filters.year !== today.getFullYear() ||
+    filters.month !== today.getMonth() ||
+    Boolean(filters.bankAccountId) ||
+    Boolean(filters.search) ||
+    Boolean(filters.type);
 
   return (
     <div className='bg-gray-100 rounded-2xl w-full h-full p-10 flex flex-col'>
@@ -46,8 +56,10 @@ export function Transactions() {
         <>
           <FiltersModal
             open={isFiltersModalOpen}
+            filters={filters}
             onClose={handleCloseFiltersModal}
             onApplyFilters={handleApplyFilters}
+            onClearFilters={handleClearFilters}
           />
 
           <header>
@@ -57,16 +69,54 @@ export function Transactions() {
                 selectedType={filters.type}
               />
 
-              <button onClick={handleOpenFiltersModal}>
+              <button
+                onClick={handleOpenFiltersModal}
+                className={cn(
+                  'relative p-2 rounded-full transition-colors',
+                  hasActiveFilters ? 'bg-teal-900/10 text-teal-900' : 'text-gray-800',
+                )}
+              >
                 <FilterIcon />
+                {hasActiveFilters && (
+                  <span className='absolute top-0 right-0 w-2.5 h-2.5 bg-teal-900 rounded-full ring-2 ring-gray-100' />
+                )}
               </button>
             </div>
+
+            {hasActiveFilters && (
+              <div className='mt-4 flex items-center gap-2'>
+                <span className='text-xs font-medium text-gray-700'>Filtros ativos:</span>
+                <div className='flex items-center gap-2 flex-wrap'>
+                  {filters.search && (
+                    <span className='inline-flex items-center gap-1 text-xs bg-white px-2 py-1 rounded-full text-gray-800 shadow-sm'>
+                      &quot;{filters.search}&quot;
+                    </span>
+                  )}
+                  <span className='inline-flex items-center gap-1 text-xs bg-white px-2 py-1 rounded-full text-gray-800 shadow-sm'>
+                    {MONTHS[filters.month]} {filters.year}
+                  </span>
+                  {filters.bankAccountId && (
+                    <span className='inline-flex items-center gap-1 text-xs bg-white px-2 py-1 rounded-full text-gray-800 shadow-sm'>
+                      Conta selecionada
+                    </span>
+                  )}
+                  <button
+                    onClick={handleClearFilters}
+                    className='inline-flex items-center gap-1 text-xs text-red-900 font-medium hover:underline'
+                  >
+                    <Cross2Icon className='w-3 h-3' />
+                    Limpar
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className='mt-6 relative'>
               <Swiper
                 slidesPerView={3}
                 centeredSlides
                 initialSlide={filters.month}
+                key={filters.year}
                 onSlideChange={(swiper) => {
                   handleChangeFilters('month')(swiper.realIndex);
                 }}

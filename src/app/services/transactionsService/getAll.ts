@@ -8,6 +8,7 @@ export type TransactionsFilters = {
   year: number;
   bankAccountId?: string;
   type?: Transaction['type'];
+  search?: string;
 };
 
 export async function getAll(filters: TransactionsFilters) {
